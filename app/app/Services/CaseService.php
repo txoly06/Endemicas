@@ -23,22 +23,29 @@ class CaseService
         return $this->caseRepository->getFiltered($filters, $perPage);
     }
 
-    /**
-     * Create a new case with audit logging
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | CRIAR CASO (LÓGICA DE NEGÓCIO)
+    |--------------------------------------------------------------------------
+    | Centraliza toda a lógica de criação de casos:
+    | 1. Associa ao utilizador que criou.
+    | 2. Cria o histórico inicial automaticamente.
+    | 3. Limpa cache para refletir mudanças no dashboard.
+    | 4. Gera log de auditoria detalhado.
+    */
     public function createCase(array $data, User $registeredBy): DiseaseCase
     {
         $data['user_id'] = $registeredBy->id;
         
         $case = $this->caseRepository->create($data);
 
-        // Create initial history entry
-        $this->createHistoryEntry($case, $registeredBy, null, $case->status, 'Case created');
+        // Cria entrada inicial no histórico (Rastreabilidade)
+        $this->createHistoryEntry($case, $registeredBy, null, $case->status, 'Caso registado no sistema');
 
-        // Invalidate cache
+        // Invalida cache para que contadores do dashboard atualizem
         $this->caseRepository->clearCache();
 
-        // Audit log
+        // Auditoria
         $this->logAuditAction('case.created', $registeredBy, [
             'case_id' => $case->id,
             'patient_code' => $case->patient_code,
@@ -48,9 +55,14 @@ class CaseService
         return $case->load('disease');
     }
 
-    /**
-     * Update an existing case with status tracking
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | ATUALIZAR CASO E RASTREAR MUDANÇAS
+    |--------------------------------------------------------------------------
+    | Ao atualizar um caso, verificamos se o STATUS mudou.
+    | Se mudou (ex: Suspeito -> Confirmado), criamos um registo histórico.
+    | Isso permite saber QUEM mudou o status e QUANDO.
+    */
     public function updateCase(DiseaseCase $case, array $data, User $updatedBy): DiseaseCase
     {
         $previousStatus = $case->status;
@@ -58,21 +70,21 @@ class CaseService
         
         $case = $this->caseRepository->update($case, $data);
 
-        // Create history entry if status changed
+        // Deteta mudança de estado para histórico clínico
         if (isset($data['status']) && $data['status'] !== $previousStatus) {
             $this->createHistoryEntry(
                 $case,
                 $updatedBy,
                 $previousStatus,
                 $data['status'],
-                $data['status_notes'] ?? 'Status updated'
+                $data['status_notes'] ?? 'Atualização de estado clínico'
             );
         }
 
-        // Invalidate cache
+        // Limpa cache
         $this->caseRepository->clearCache();
 
-        // Audit log
+        // Auditoria de campos alterados
         $this->logAuditAction('case.updated', $updatedBy, [
             'case_id' => $case->id,
             'patient_code' => $case->patient_code,

@@ -11,9 +11,15 @@ use Illuminate\Support\Facades\Log;
 
 class AlertService
 {
-    /**
-     * Get filtered alerts
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | FILTRAR E LISTAR ALERTAS
+    |--------------------------------------------------------------------------
+    | Aplica filtros complexos à query de alertas.
+    | - active: Se true, mostra apenas ativos. Se false, inativos.
+    | - severity: Filtra por gravidade ('high', 'critical', etc).
+    | - disease_id: Filtra por uma doença específica.
+    */
     public function getFilteredAlerts(array $filters, int $perPage = 15): LengthAwarePaginator
     {
         $query = Alert::with(['disease:id,name', 'creator:id,name']);

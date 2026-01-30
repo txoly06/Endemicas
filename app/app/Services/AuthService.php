@@ -14,9 +14,15 @@ class AuthService
     private const ACCESS_TOKEN_EXPIRATION_MINUTES = 60;
     private const REFRESH_TOKEN_EXPIRATION_DAYS = 30;
 
-    /**
-     * Register a new user
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | REGISTO DE UTILIZADOR
+    |--------------------------------------------------------------------------
+    | 1. Cria o registo na tabela 'users'.
+    | 2. Faz hash da password para segurança (nunca guardada em texto limpo).
+    | 3. Gera tokens (acesso e refresh) para login imediato.
+    | 4. Regista a ação no log de auditoria.
+    */
     public function register(array $data): array
     {
         $user = User::create([
@@ -40,18 +46,25 @@ class AuthService
         ];
     }
 
-    /**
-     * Authenticate user and create tokens
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | LOGIN / AUTENTICAÇÃO
+    |--------------------------------------------------------------------------
+    | 1. Busca utilizador pelo email.
+    | 2. Verifica se a senha corresponde ao hash guardado.
+    | 3. Emite novos tokens se sucesso.
+    | 4. Loga falhas para deteção de ataques de força bruta.
+    */
     public function login(string $email, string $password): array
     {
         $user = User::where('email', $email)->first();
 
+        // Verificação segura de senha
         if (!$user || !Hash::check($password, $user->password)) {
             $this->logAuditAction('auth.login_failed', null, ['email' => $email]);
             
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => ['As credenciais fornecidas estão incorretas.'],
             ]);
         }
 

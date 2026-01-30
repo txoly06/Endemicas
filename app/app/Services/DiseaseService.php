@@ -9,9 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class DiseaseService
 {
-    /**
-     * Get filtered diseases
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | FILTRAR DOENÇAS
+    |--------------------------------------------------------------------------
+    | Pesquisa doenças pelo nome ou código (ex: 'Malária' ou 'B50').
+    | Suporta filtro por status (ativo/inativo) para gestão administrativa.
+    */
     public function getFilteredDiseases(array $filters, int $perPage = 15): LengthAwarePaginator
     {
         $query = Disease::query();
