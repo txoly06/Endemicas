@@ -39,6 +39,14 @@ class StatsController extends Controller
      *      )
      * )
      */
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD GERAL
+    |--------------------------------------------------------------------------
+    | Retorna os contadores principais para os cards do topo do dashboard:
+    | Casos Ativos, Recuperados, Óbitos, Total, Alertas e Doenças.
+    | Agrega dados de múltiplos repositórios.
+    */
     public function dashboard(): JsonResponse
     {
         $caseStats = $this->caseRepository->getCountsByStatus();
@@ -144,6 +152,13 @@ class StatsController extends Controller
      *      )
      * )
      */
+    /*
+    |--------------------------------------------------------------------------
+    | DADOS GEOGRÁFICOS (MAPA)
+    |--------------------------------------------------------------------------
+    | Prepara os dados para o mapa de calor (Heatmap) ou marcadores.
+    | Retorna coordenadas (lat/lng) e intensidade para plotar no Leaflet.
+    */
     public function geographic(): JsonResponse
     {
         return response()->json($this->caseRepository->getGeographicData());

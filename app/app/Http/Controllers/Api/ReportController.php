@@ -10,9 +10,13 @@ use Illuminate\Http\Response;
 
 class ReportController extends Controller
 {
-    /**
-     * Download Patient Card as PDF
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | GERAR FICHA DO PACIENTE (PDF)
+    |--------------------------------------------------------------------------
+    | Gera um PDF detalhado com os dados de um caso específico.
+    | Inclui um Código QR para verificação rápida de autenticidade (anti-fraude).
+    */
     public function patientCard(DiseaseCase $case)
     {
         // Ensure user can view this case
@@ -26,14 +30,18 @@ class ReportController extends Controller
         return $pdf->download("ficha_paciente_{$case->patient_code}.pdf");
     }
 
-    /**
-     * Download Cases Report as PDF
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | RELATÓRIO DE CASOS (PDF)
+    |--------------------------------------------------------------------------
+    | Gera uma lista de casos em PDF baseada nos filtros aplicados.
+    | Útil para impressão de listas mensais ou por província.
+    */
     public function casesReport(Request $request)
     {
         $query = DiseaseCase::with(['disease', 'registeredBy']);
 
-        // Apply filters (simplified version of CaseService)
+        // 1. Aplicar filtros (Status, Doença, Província)
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
@@ -44,7 +52,7 @@ class ReportController extends Controller
             $query->where('province', $request->province);
         }
 
-        $cases = $query->limit(100)->get(); // Limit for PDF performance
+        $cases = $query->limit(100)->get(); // Limite de 100 para não sobrecarregar o PDF
 
         $pdf = Pdf::loadView('reports.cases_report', [
             'cases' => $cases,
@@ -54,9 +62,13 @@ class ReportController extends Controller
         return $pdf->download('relatorio_casos.pdf');
     }
 
-    /**
-     * Export Cases as CSV
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORTAR PARA EXCEL (CSV)
+    |--------------------------------------------------------------------------
+    | Exporta grandes volumes de dados para processamento externo (Excel/Sheets).
+    | Usa "stream" para não estourar a memória do servidor se houver milhares de linhas.
+    */
     public function exportCsv(Request $request)
     {
         $query = DiseaseCase::with('disease');
@@ -75,6 +87,7 @@ class ReportController extends Controller
             "Expires" => "0"
         ];
 
+        // Escreve linha a linha na saída
         $callback = function() use ($cases) {
             $file = fopen('php://output', 'w');
             fputcsv($file, ['ID', 'Paciente', 'Doença', 'Status', 'Província', 'Data Diagnóstico']);

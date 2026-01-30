@@ -38,6 +38,13 @@ class AlertController extends Controller
      *      )
      * )
      */
+    /*
+    |--------------------------------------------------------------------------
+    | LISTAR ALERTAS (FILTROS)
+    |--------------------------------------------------------------------------
+    | Retorna uma lista paginada de alertas.
+    | Permite filtrar por status (ativo/inativo), gravidade ou doença específica.
+    */
     public function index(Request $request): JsonResponse
     {
         // Debugging 403
@@ -55,40 +62,16 @@ class AlertController extends Controller
         return response()->json($alerts);
     }
 
-    /**
-     * @OA\Post(
-     *      path="/alerts",
-     *      operationId="createAlert",
-     *      tags={"Alerts"},
-     *      summary="Create new alert",
-     *      description="Create a new system alert (Admin only)",
-     *      security={{"bearerAuth":{}}},
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(
-     *              required={"title","message","severity"},
-     *              @OA\Property(property="disease_id", type="integer", example=1),
-     *              @OA\Property(property="title", type="string", example="Malaria Outbreak"),
-     *              @OA\Property(property="message", type="string", example="High number of cases reported"),
-     *              @OA\Property(property="severity", type="string", enum={"low","medium","high","critical"}, example="high"),
-     *              @OA\Property(property="affected_area", type="string", example="Luanda"),
-     *              @OA\Property(property="is_active", type="boolean", example=true),
-     *              @OA\Property(property="expires_at", type="string", format="date", example="2026-03-01")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=201,
-     *          description="Alert created successfully",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Alert created successfully"),
-     *              @OA\Property(property="alert", type="object")
-     *          )
-     *      ),
-     *      @OA\Response(response=422, description="Validation error")
-     * )
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | CRIAR NOVO ALERTA (ADMIN)
+    |--------------------------------------------------------------------------
+    | Cria um alerta para notificar o público ou profissionais.
+    | Exige título, mensagem, gravidade e área afetada.
+    */
     public function store(Request $request): JsonResponse
     {
+        // 1. Validar dados do alerta
         $validated = $request->validate([
             'disease_id' => ['nullable', 'exists:diseases,id'],
             'title' => ['required', 'string', 'max:255'],
@@ -99,6 +82,7 @@ class AlertController extends Controller
             'expires_at' => ['nullable', 'date', 'after:now'],
         ]);
 
+        // 2. Persistir alerta
         $alert = $this->alertService->createAlert($validated, $request->user());
 
         return response()->json([

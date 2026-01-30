@@ -35,6 +35,13 @@ class DiseaseController extends Controller
      *      )
      * )
      */
+    /*
+    |--------------------------------------------------------------------------
+    | LISTAR DOENÇAS
+    |--------------------------------------------------------------------------
+    | Retorna todas as doenças registadas.
+    | Usado para preencher 'selects' ou listas de gestão.
+    */
     public function index(Request $request): JsonResponse
     {
         $diseases = $this->diseaseService->getFilteredDiseases(
@@ -48,39 +55,16 @@ class DiseaseController extends Controller
         return response()->json($diseases);
     }
 
-    /**
-     * @OA\Post(
-     *      path="/diseases",
-     *      operationId="createDisease",
-     *      tags={"Diseases"},
-     *      summary="Create disease",
-     *      security={{"bearerAuth":{}}},
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(
-     *              required={"name","code"},
-     *              @OA\Property(property="name", type="string", example="Malaria"),
-     *              @OA\Property(property="code", type="string", example="B50"),
-     *              @OA\Property(property="description", type="string"),
-     *              @OA\Property(property="symptoms", type="string"),
-     *              @OA\Property(property="prevention", type="string"),
-     *              @OA\Property(property="treatment", type="string"),
-     *              @OA\Property(property="is_active", type="boolean", example=true)
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=201,
-     *          description="Disease created successfully",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Disease created successfully"),
-     *              @OA\Property(property="disease", type="object")
-     *          )
-     *      ),
-     *      @OA\Response(response=422, description="Validation error")
-     * )
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | REGISTAR NOVA DOENÇA (ADMIN)
+    |--------------------------------------------------------------------------
+    | Armazena uma nova doença no sistema.
+    | Código deve ser único (ex: 'MAL' para Malária).
+    */
     public function store(Request $request): JsonResponse
     {
+        // 1. Validar campos
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'code' => ['required', 'string', 'max:50', 'unique:diseases'],
@@ -91,6 +75,7 @@ class DiseaseController extends Controller
             'is_active' => ['boolean'],
         ]);
 
+        // 2. Criar
         $disease = $this->diseaseService->createDisease($validated, $request->user());
 
         return response()->json([
