@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "test_user_login_functionality",
+    "description": "Verify that the /auth/login endpoint allows users to log in with valid credentials and returns an authentication token."
+  },
+  {
+    "id": "TC002",
+    "title": "test_user_registration_process",
+    "description": "Ensure the /auth/register endpoint successfully registers a new user with valid data and returns appropriate confirmation."
+  },
+  {
+    "id": "TC003",
+    "title": "test_user_logout_process",
+    "description": "Check that the /auth/logout endpoint properly logs out an authenticated user and invalidates the session token."
+  },
+  {
+    "id": "TC004",
+    "title": "test_get_current_user_info",
+    "description": "Validate that the /auth/me endpoint returns the current authenticated user's information when provided with a valid token."
+  },
+  {
+    "id": "TC005",
+    "title": "test_get_active_public_alerts",
+    "description": "Confirm that the /public/alerts endpoint returns a list of active public alerts accessible without authentication."
+  },
+  {
+    "id": "TC006",
+    "title": "test_create_new_alert",
+    "description": "Test the /alerts POST endpoint to create a new system alert with valid data and verify it is stored correctly."
+  },
+  {
+    "id": "TC007",
+    "title": "test_update_existing_alert",
+    "description": "Verify that the /alerts/{id} PUT endpoint updates an existing alert's details correctly when provided valid data and alert ID."
+  },
+  {
+    "id": "TC008",
+    "title": "test_delete_alert",
+    "description": "Ensure the /alerts/{id} DELETE endpoint removes the specified alert and returns appropriate success response."
+  },
+  {
+    "id": "TC009",
+    "title": "test_list_disease_cases",
+    "description": "Check that the /cases GET endpoint returns a list of disease cases accessible to the authenticated user."
+  },
+  {
+    "id": "TC010",
+    "title": "test_create_disease_case",
+    "description": "Validate that the /cases POST endpoint allows creation of a new disease case with valid input data and returns the created case details."
+  }
+]

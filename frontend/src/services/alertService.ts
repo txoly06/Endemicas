@@ -9,6 +9,11 @@ export const alertService = {
         return response.data;
     },
 
+    getActive: async (): Promise<Alert[]> => {
+        const response = await api.get<Alert[]>('/public/alerts');
+        return response.data;
+    },
+
     create: async (data: Partial<Alert>): Promise<Alert> => {
         const response = await api.post<Alert>('/alerts', data);
         return response.data;

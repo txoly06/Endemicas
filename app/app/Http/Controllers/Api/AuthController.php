@@ -78,19 +78,30 @@ class AuthController extends Controller
      *      @OA\Response(response=422, description="Validation error")
      * )
      */
+    /*
+    |--------------------------------------------------------------------------
+    | REGISTAR NOVO UTILIZADOR
+    |--------------------------------------------------------------------------
+    | Recebe dados como nome, email e senha.
+    | Valida se o email já existe e se a senha é forte.
+    | Cria o utilizador e retorna um token de acesso imediato.
+    */
     public function register(Request $request): JsonResponse
     {
+        // 1. Validar os dados recebidos
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => ['sometimes', 'in:health_professional,public'], // Admin cannot self-register
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'], // Email deve ser único
+            'password' => ['required', 'confirmed', Password::defaults()], // Confirmed exige campo 'password_confirmation'
+            'role' => ['sometimes', 'in:health_professional,public'], // Admin não pode se auto-registar por segurança
             'phone' => ['nullable', 'string', 'max:20'],
             'institution' => ['nullable', 'string', 'max:255'],
         ]);
 
+        // 2. Criar utilizador através do serviço
         $result = $this->authService->register($validated);
 
+        // 3. Retornar resposta com Token
         return response()->json([
             'message' => 'User registered successfully',
             'user' => $result['user'],
@@ -101,46 +112,25 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * @OA\Post(
-     *      path="/auth/login",
-     *      operationId="login",
-     *      tags={"Authentication"},
-     *      summary="Login user",
-     *      description="Login with email and password to get access tokens",
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(
-     *              required={"email","password"},
-     *              @OA\Property(property="email", type="string", format="email", example="admin@sistema.ao"),
-     *              @OA\Property(property="password", type="string", format="password", example="password123")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Login successful",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Login successful"),
-     *              @OA\Property(property="user", type="object"),
-     *              @OA\Property(property="access_token", type="string"),
-     *              @OA\Property(property="refresh_token", type="string"),
-     *              @OA\Property(property="token_type", type="string", example="Bearer"),
-     *              @OA\Property(property="expires_in", type="integer", example=3600)
-     *          )
-     *      ),
-     *      @OA\Response(response=401, description="Invalid credentials"),
-     *      @OA\Response(response=422, description="Validation error")
-     * )
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | LOGIN (ENTRAR NO SISTEMA)
+    |--------------------------------------------------------------------------
+    | Verifica credenciais (email/senha).
+    | Se correto, emite um novo token de acesso.
+    */
     public function login(Request $request): JsonResponse
     {
+        // 1. Validar prenchimento
         $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
+        // 2. Tentar autenticar via serviço
         $result = $this->authService->login($request->email, $request->password);
 
+        // 3. Retornar sucesso ou erro (gerido pelo AuthService em caso de falha)
         return response()->json([
             'message' => 'Login successful',
             'user' => $result['user'],

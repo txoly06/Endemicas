@@ -58,7 +58,7 @@ export default function PublicContentDetail() {
                         {content.author && (
                             <span className="flex items-center">
                                 <User className="h-4 w-4 mr-1" />
-                                {content.author}
+                                {content.author.name}
                             </span>
                         )}
                     </div>

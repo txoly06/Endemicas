@@ -1,0 +1,17 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:8000",
+  "backendAuthType": "public",
+  "executionArgs": {
+    "projectName": "app",
+    "projectPath": "/Users/nurityoliveiira/DevProjects/Gemini Projets/PPW/app",
+    "testIds": [],
+    "additionalInstruction": "Ensure testing of the public/auth/admin roles on the new PostgreSQL backend. Verify public alerts and auth logic.",
+    "envs": {
+      "API_KEY": "sk-user-DNLKwBIHyTjai96AxfJr5lexs5TI1wx5_3YKcXeMdA6_jkHzH02fPBBdr8J_NNR0Y25c25VdFh3aVzDEtME8lxWgewT2uwwCjTFRN7pQWU5bwVzH6VxjE-WWXf22rW5NE58"
+    }
+  },
+  "proxy": "http://e5310708-83fb-48b1-ae31-2d79126b1216:sxiM5SspTPoME1neUMxfHBMU4I338U03@tun.testsprite.com:8080"
+}

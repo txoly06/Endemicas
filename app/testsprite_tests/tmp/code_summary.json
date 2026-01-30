@@ -1,0 +1,167 @@
+{
+    "tech_stack": [
+        "php",
+        "laravel",
+        "sqlite",
+        "sanctum"
+    ],
+    "features": [
+        {
+            "name": "Auth API",
+            "description": "Authentication endpoints for login, registration, logout, and token management.",
+            "files": [
+                "app/Http/Controllers/Api/AuthController.php"
+            ],
+            "api_doc": {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/auth/login": {
+                        "post": {
+                            "summary": "Login user"
+                        }
+                    },
+                    "/api/auth/register": {
+                        "post": {
+                            "summary": "Register user"
+                        }
+                    },
+                    "/api/auth/logout": {
+                        "post": {
+                            "summary": "Logout user"
+                        }
+                    },
+                    "/api/auth/me": {
+                        "get": {
+                            "summary": "Get current user"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "Alerts API",
+            "description": "CRUD operations for system alerts, including public active alerts.",
+            "files": [
+                "app/Http/Controllers/Api/AlertController.php"
+            ],
+            "api_doc": {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/public/alerts": {
+                        "get": {
+                            "summary": "Get active public alerts"
+                        }
+                    },
+                    "/api/alerts": {
+                        "get": {
+                            "summary": "List alerts (Admin/Auth)"
+                        },
+                        "post": {
+                            "summary": "Create alert"
+                        }
+                    },
+                    "/api/alerts/{id}": {
+                        "put": {
+                            "summary": "Update alert"
+                        },
+                        "delete": {
+                            "summary": "Delete alert"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "Cases API",
+            "description": "Management of Disease Cases, including creation, status updates, and history tracking.",
+            "files": [
+                "app/Http/Controllers/Api/CaseController.php"
+            ],
+            "api_doc": {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/cases": {
+                        "get": {
+                            "summary": "List cases"
+                        },
+                        "post": {
+                            "summary": "Create case"
+                        }
+                    },
+                    "/api/cases/{id}": {
+                        "get": {
+                            "summary": "Get case details"
+                        },
+                        "put": {
+                            "summary": "Update case"
+                        }
+                    },
+                    "/api/cases/{id}/history": {
+                        "get": {
+                            "summary": "Get case history"
+                        }
+                    },
+                    "/api/public/verify/{code}": {
+                        "get": {
+                            "summary": "Verify patient case publicly"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "Reports API",
+            "description": "Generation of PDF and CSV reports for cases and patient cards.",
+            "files": [
+                "app/Http/Controllers/Api/ReportController.php"
+            ],
+            "api_doc": {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/reports/cases/pdf": {
+                        "get": {
+                            "summary": "Download Cases PDF"
+                        }
+                    },
+                    "/api/reports/cases/csv": {
+                        "get": {
+                            "summary": "Download Cases CSV"
+                        }
+                    },
+                    "/api/reports/patient-card/{id}": {
+                        "get": {
+                            "summary": "Download Patient Card PDF"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "Stats API",
+            "description": "Statistical data for dashboards (timeline, demographics, geography).",
+            "files": [
+                "app/Http/Controllers/Api/StatsController.php"
+            ],
+            "api_doc": {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/stats/dashboard": {
+                        "get": {
+                            "summary": "General dashboard stats"
+                        }
+                    },
+                    "/api/stats/timeline": {
+                        "get": {
+                            "summary": "Case timeline"
+                        }
+                    },
+                    "/api/stats/geographic": {
+                        "get": {
+                            "summary": "Geographic distribution"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

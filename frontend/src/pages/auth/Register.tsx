@@ -50,6 +50,11 @@ export default function Register() {
                         </Link>
                     </p>
                 </div>
+                <div className="text-center mt-2">
+                    <Link to="/" className="text-sm text-gray-500 hover:text-gray-900">
+                        &larr; Voltar à página inicial
+                    </Link>
+                </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     <div className="space-y-4">

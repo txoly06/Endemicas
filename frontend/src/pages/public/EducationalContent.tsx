@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react';
-// import api from '../../services/api';
+import { contentService } from '../../services/contentService';
 import { Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function EducationalContent() {
     const [loading, setLoading] = useState(true);
     const [contents, setContents] = useState<any[]>([]);
 
     useEffect(() => {
-        // Placeholder fetching logic - will be replaced with real API call
-        // contents would be fetched from /public/content
-        setTimeout(() => {
-            setContents([
-                { id: 1, title: 'Prevenção da Malária', type: 'guide', summary: 'Como se proteger e proteger a sua família.' },
-                { id: 2, title: 'Sintomas da Cólera', type: 'article', summary: 'Identifique os sinais de alerta cedo.' },
-                { id: 3, title: 'Vacinação em Dia', type: 'video', summary: 'A importância de manter o calendário vacinal.' },
-            ]);
-            setLoading(false);
-        }, 1000);
+        const fetchContent = async () => {
+            try {
+                const data = await contentService.getPublic();
+                setContents(data);
+            } catch (error) {
+                console.error("Failed to load content", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
     }, []);
 
     return (
@@ -41,9 +43,12 @@ export default function EducationalContent() {
                                     </span>
                                     <h3 className="mt-4 text-xl font-bold text-gray-900">{item.title}</h3>
                                     <p className="mt-2 text-gray-600">{item.summary}</p>
-                                    <button className="mt-6 text-sm font-semibold text-blue-600 hover:text-blue-500">
+                                    <Link
+                                        to={`/content/${item.slug}`}
+                                        className="mt-6 inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-500"
+                                    >
                                         Ler mais &rarr;
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))}

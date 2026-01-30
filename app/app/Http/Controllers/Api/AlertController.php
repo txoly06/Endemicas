@@ -40,6 +40,9 @@ class AlertController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        // Debugging 403
+        \Illuminate\Support\Facades\Log::info("Index hitting");
+        
         $alerts = $this->alertService->getFilteredAlerts(
             [
                 'active' => $request->has('active') ? $request->boolean('active') : null,

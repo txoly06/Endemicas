@@ -117,7 +117,7 @@ export default function DashboardHome() {
                         </div>
                     </div>
                     {/* Explicit style to ensure Recharts can calculate dimensions */}
-                    <div style={{ width: '100%', height: 320 }}>
+                    <div style={{ width: '100%', height: 320, minWidth: 0 }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={timeline} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                 <defs>
@@ -162,7 +162,7 @@ export default function DashboardHome() {
                         <p className="text-sm text-slate-500">Visão geral dos casos atuais</p>
                     </div>
                     {/* Explicit style to ensure Recharts can calculate dimensions */}
-                    <div style={{ width: '100%', height: 320 }}>
+                    <div style={{ width: '100%', height: 320, minWidth: 0 }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
                                 data={[

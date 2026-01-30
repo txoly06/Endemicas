@@ -1,4 +1,4 @@
-import { FileText, Download, BarChart2 } from 'lucide-react';
+import { FileText, Download, BarChart2, AlertCircle } from 'lucide-react';
 import { Button } from '../../components/Button';
 import { reportService } from '../../services/reportService';
 
@@ -94,5 +94,4 @@ export default function Reports() {
     );
 }
 
-// Importing missing icon
-import { AlertCircle } from 'lucide-react';
+

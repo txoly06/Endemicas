@@ -20,8 +20,8 @@ class ReportController extends Controller
 
         $pdf = Pdf::loadView('reports.patient_card', [
             'case' => $case,
-            'qr_data' => "BILHETE+{$case->patient_dob}+{$case->patient_name}" // Simple generation for now
-        ]);
+            'qr_data' => "http://localhost:5173/verify/" . $case->patient_code
+        ])->setOptions(['isRemoteEnabled' => true, 'isHtml5ParserEnabled' => true]);
 
         return $pdf->download("ficha_paciente_{$case->patient_code}.pdf");
     }
@@ -31,7 +31,7 @@ class ReportController extends Controller
      */
     public function casesReport(Request $request)
     {
-        $query = DiseaseCase::with(['disease', 'user']);
+        $query = DiseaseCase::with(['disease', 'registeredBy']);
 
         // Apply filters (simplified version of CaseService)
         if ($request->has('status')) {

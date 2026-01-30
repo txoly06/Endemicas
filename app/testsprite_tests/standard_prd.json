@@ -1,0 +1,204 @@
+{
+  "meta": {
+    "project": "Disease Case Management API",
+    "date": "2026-01-29",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "This API product provides a comprehensive system for managing disease cases, system alerts, user authentication, reports generation, and statistical dashboards to support disease monitoring and public health responses.",
+  "core_goals": [
+    "Enable secure user authentication and session management.",
+    "Provide robust CRUD operations for managing disease cases with history tracking.",
+    "Manage system alerts including public active alerts accessible without authentication.",
+    "Generate downloadable reports in PDF and CSV formats for cases and patient cards.",
+    "Deliver statistical dashboard data for case timelines, demographics, and geographic distribution to aid analysis."
+  ],
+  "key_features": [
+    "Authentication API endpoints for user login, registration, logout, and retrieval of current user information using token-based sessions.",
+    "Alerts API for creating, updating, deleting, and listing system alerts with separate public endpoints for active alerts.",
+    "Cases API to create, update, retrieve, and track history of disease cases, including public verification of patient cases via code.",
+    "Reports API to generate and download PDF and CSV reports for cases and patient cards.",
+    "Stats API providing statistical data endpoints for dashboard overview, case timeline, demographic breakdowns, and geographic distribution."
+  ],
+  "user_flow_summary": [
+    "User registers for an account via /auth/register endpoint and then logs in through /auth/login to obtain authentication tokens.",
+    "Authenticated user creates and manages disease cases through /cases endpoints and can retrieve case history details.",
+    "System administrators manage system alerts through /alerts endpoints and users can view public active alerts via /public/alerts without authentication.",
+    "Users can request downloadable reports for cases and patient cards in PDF or CSV formats.",
+    "Clients fetch statistical dashboard data showing the timeline of cases, geographic and demographic distributions to assess disease trends."
+  ],
+  "validation_criteria": [
+    "Authentication endpoints correctly restrict access based on user authentication state and token validity.",
+    "CRUD operations for alerts and cases function correctly with data validation and error handling.",
+    "Case history tracking accurately reflects changes over time for each case record.",
+    "Reports download endpoints produce correctly formatted and complete PDF and CSV files.",
+    "Statistical endpoints provide accurate, timely, and relevant aggregated data for dashboard displays.",
+    "Public endpoints for alerts and case verification are accessible without authentication and return expected data."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "php",
+      "laravel",
+      "sqlite",
+      "sanctum"
+    ],
+    "features": [
+      {
+        "name": "Auth API",
+        "description": "Authentication endpoints for login, registration, logout, and token management.",
+        "files": [
+          "app/Http/Controllers/Api/AuthController.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/auth/login": {
+              "post": {
+                "summary": "Login user"
+              }
+            },
+            "/auth/register": {
+              "post": {
+                "summary": "Register user"
+              }
+            },
+            "/auth/logout": {
+              "post": {
+                "summary": "Logout user"
+              }
+            },
+            "/auth/me": {
+              "get": {
+                "summary": "Get current user"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Alerts API",
+        "description": "CRUD operations for system alerts, including public active alerts.",
+        "files": [
+          "app/Http/Controllers/Api/AlertController.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/public/alerts": {
+              "get": {
+                "summary": "Get active public alerts"
+              }
+            },
+            "/alerts": {
+              "get": {
+                "summary": "List alerts (Admin/Auth)"
+              },
+              "post": {
+                "summary": "Create alert"
+              }
+            },
+            "/alerts/{id}": {
+              "put": {
+                "summary": "Update alert"
+              },
+              "delete": {
+                "summary": "Delete alert"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Cases API",
+        "description": "Management of Disease Cases, including creation, status updates, and history tracking.",
+        "files": [
+          "app/Http/Controllers/Api/CaseController.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/cases": {
+              "get": {
+                "summary": "List cases"
+              },
+              "post": {
+                "summary": "Create case"
+              }
+            },
+            "/cases/{id}": {
+              "get": {
+                "summary": "Get case details"
+              },
+              "put": {
+                "summary": "Update case"
+              }
+            },
+            "/cases/{id}/history": {
+              "get": {
+                "summary": "Get case history"
+              }
+            },
+            "/public/verify/{code}": {
+              "get": {
+                "summary": "Verify patient case publicly"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Reports API",
+        "description": "Generation of PDF and CSV reports for cases and patient cards.",
+        "files": [
+          "app/Http/Controllers/Api/ReportController.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/reports/cases/pdf": {
+              "get": {
+                "summary": "Download Cases PDF"
+              }
+            },
+            "/reports/cases/csv": {
+              "get": {
+                "summary": "Download Cases CSV"
+              }
+            },
+            "/reports/patient-card/{id}": {
+              "get": {
+                "summary": "Download Patient Card PDF"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Stats API",
+        "description": "Statistical data for dashboards (timeline, demographics, geography).",
+        "files": [
+          "app/Http/Controllers/Api/StatsController.php"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "paths": {
+            "/stats/dashboard": {
+              "get": {
+                "summary": "General dashboard stats"
+              }
+            },
+            "/stats/timeline": {
+              "get": {
+                "summary": "Case timeline"
+              }
+            },
+            "/stats/geographic": {
+              "get": {
+                "summary": "Geographic distribution"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

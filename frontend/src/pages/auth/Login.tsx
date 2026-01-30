@@ -37,6 +37,11 @@ export default function Login() {
                             criar uma nova conta
                         </Link>
                     </p>
+                    <div className="mt-4">
+                        <Link to="/" className="text-sm text-gray-500 hover:text-gray-900">
+                            &larr; Voltar à página inicial
+                        </Link>
+                    </div>
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

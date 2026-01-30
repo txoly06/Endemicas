@@ -4,6 +4,7 @@ import Landing from './pages/public/Landing';
 import EducationalContent from './pages/public/EducationalContent';
 import PublicContentDetail from './pages/public/PublicContentDetail';
 import PublicAlerts from './pages/public/PublicAlerts';
+import VerifyCase from './pages/public/VerifyCase';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import DashboardHome from './pages/admin/DashboardHome';
@@ -49,7 +50,9 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/content" element={<EducationalContent />} />
           <Route path="/content/:slug" element={<PublicContentDetail />} />
+          <Route path="/content/:slug" element={<PublicContentDetail />} />
           <Route path="/alerts" element={<PublicAlerts />} />
+          <Route path="/verify/:code" element={<VerifyCase />} />
         </Route>
 
         {/* Auth Routes */}

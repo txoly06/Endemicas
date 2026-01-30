@@ -8,6 +8,12 @@ export const contentService = {
         return Array.isArray(response.data.data) ? response.data.data : (Array.isArray(response.data) ? response.data : []);
     },
 
+    getPublic: async (): Promise<EducationalContent[]> => {
+        const response = await api.get<any>('/public/content');
+        // Handle Laravel pagination { data: [...], ... }
+        return response.data.data || [];
+    },
+
     create: async (data: Partial<EducationalContent>): Promise<EducationalContent> => {
         const response = await api.post<EducationalContent>('/content', data);
         return response.data;
